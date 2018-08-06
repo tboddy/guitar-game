@@ -1,0 +1,7 @@
+/*@font-face {font-family:'zapper';src:url('zapper.ttf') format('truetype');font-weight:normal;}*/
+/*@font-face {font-family:'targets';src:url('targets.ttf') format('truetype');font-weight:normal;}*/
+* {margin:0;padding:0;cursor:default;image-rendering:pixelated;}
+body, html {background-color:black;overflow:hidden;display:flex;justify-content:center;align-items:center;width:100%;height:100%;color:white;}
+canvas {height:100% !important;}
+span, em {width:0;height:0;position:absolute;top:-999;left:-999;}
+em {font-weight:bold;}

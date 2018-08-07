@@ -90,12 +90,12 @@ const strings = {
 			triggerGraphic.zIndex = 7;
 			triggerGraphic.beginFill(0x442434);
 			triggerGraphic.lineStyle(0);
-			triggerGraphic.drawRect(grid * 4, 0, 3, gameHeight);
+			triggerGraphic.drawRect(grid * 5, 0, 3, gameHeight);
 			triggerGraphic.beginFill(0xd04648);
-			triggerGraphic.drawRect(grid * 4 + 1, 0, 2, gameHeight);
+			triggerGraphic.drawRect(grid * 5 + 1, 0, 2, gameHeight);
 			triggerGraphic.beginFill(0x140c1c);
-			triggerGraphic.drawRect(grid * 4 - 1, 0, 1, gameHeight);
-			triggerGraphic.drawRect(grid * 4 + 3, 0, 1, gameHeight);
+			triggerGraphic.drawRect(grid * 5 - 1, 0, 1, gameHeight);
+			triggerGraphic.drawRect(grid * 5 + 3, 0, 1, gameHeight);
 			game.stage.addChild(triggerGraphic);
 		};
 
@@ -112,7 +112,7 @@ const strings = {
 const tab = {
 
 	draw(){
-		
+		console.log('f')
 	},
 
 	init(){
@@ -127,8 +127,9 @@ const mainLoop = () => {
 init = () => {
 	PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 	document.body.appendChild(game.view);
-	strings.init();
 	mapControls();
+	strings.init();
+	tab.init();
 	game.ticker.add(mainLoop);
 };
 

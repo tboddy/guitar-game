@@ -5,8 +5,9 @@ const mainLoop = () => {
 init = () => {
 	PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 	document.body.appendChild(game.view);
-	strings.init();
 	mapControls();
+	strings.init();
+	tab.init();
 	game.ticker.add(mainLoop);
 };
 

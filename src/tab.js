@@ -1,7 +1,7 @@
 const tab = {
 
 	draw(){
-		
+		console.log('f')
 	},
 
 	init(){

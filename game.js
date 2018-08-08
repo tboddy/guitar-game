@@ -28,6 +28,14 @@ sortZIndex = () => {
     b.zIndex = b.zIndex || 0;
     return a.zIndex - b.zIndex
 	});
+},
+
+processScore = input => {
+	let scoreString = String(input);
+	for(j = scoreString.length; j < 8; j++){
+		scoreString = '0' + scoreString;
+	}
+	return scoreString;
 };
 let isFullscreen = false;
 
@@ -55,6 +63,39 @@ mapControls = () => {
 	};
 	document.addEventListener('keydown', keysDown);
 	document.addEventListener('keyup', keysUp);
+};
+let currentScore = 0, currentShit = 0;
+
+const chrome = {
+
+	draw(){
+
+		const fontStyle = new PIXI.TextStyle({
+			fill: colors.light,
+			fontFamily: 'zapper',
+			fontSize: 16,
+			dropShadow: true,
+			dropShadowColor: colors.dark,
+			dropShadowBlur: 0,
+			dropShadowAngle: Math.PI / 2,
+			dropShadowDistance: 1
+		}), scoreLabel = new PIXI.Text('score: ' + processScore(currentScore), fontStyle),
+			shitLabel = new PIXI.Text('shit: 00' + currentShit, fontStyle);
+
+		scoreLabel.x = gameWidth - scoreLabel.width - grid;
+		scoreLabel.y = grid;
+		scoreLabel.zIndex = 500;
+		scoreLabel.isChrome = true;
+		game.stage.addChild(scoreLabel);
+
+		shitLabel.x = gameWidth - shitLabel.width - grid;
+		shitLabel.y = grid * 2;
+		shitLabel.zIndex = 500;
+		shitLabel.isChrome = true;
+		game.stage.addChild(shitLabel);
+
+	}
+
 };
 const strings = {
 
@@ -86,17 +127,18 @@ const strings = {
 		},
 
 		triggerLine = () => {
-			const triggerGraphic = new PIXI.Graphics();
-			triggerGraphic.zIndex = 7;
+			const triggerGraphic = new PIXI.Graphics(), x = grid * 5;
+			triggerGraphic.zIndex = 20;
 			triggerGraphic.beginFill(0x442434);
 			triggerGraphic.lineStyle(0);
-			triggerGraphic.drawRect(grid * 5, 0, 3, gameHeight);
+			triggerGraphic.drawRect(x, 0, 3, gameHeight);
 			triggerGraphic.beginFill(0xd04648);
-			triggerGraphic.drawRect(grid * 5 + 1, 0, 2, gameHeight);
+			triggerGraphic.drawRect(x + 1, 0, 2, gameHeight);
 			triggerGraphic.beginFill(0x140c1c);
-			triggerGraphic.drawRect(grid * 5 - 1, 0, 1, gameHeight);
-			triggerGraphic.drawRect(grid * 5 + 3, 0, 1, gameHeight);
+			triggerGraphic.drawRect(x - 1, 0, 1, gameHeight);
+			triggerGraphic.drawRect(x + 3, 0, 1, gameHeight);
 			game.stage.addChild(triggerGraphic);
+			tabLimit = x - grid;
 		};
 
 		stringLines();
@@ -109,10 +151,62 @@ const strings = {
 	}
 
 };
+let tabLimit;
+
 const tab = {
 
 	draw(){
-		console.log('f')
+
+		const speed = 3, fontStyle = new PIXI.TextStyle({
+			fill: colors.light,
+			fontFamily: 'zapper',
+			fontSize: 32,
+			dropShadow: true,
+			dropShadowColor: colors.dark,
+			dropShadowBlur: 0,
+			dropShadowAngle: Math.PI / 2,
+			dropShadowDistance: 1
+		}), x = gameWidth, y = stringOffset,
+		tabBg = PIXI.Sprite.fromImage('img/tab-ball-blue.png'), tabLabel = new PIXI.Text('3', fontStyle),
+		size = 42;
+
+		tabBg.isTab = true;
+		tabBg.isTabBg = true;
+		tabBg.zIndex = 12;
+		tabBg.anchor.set(0.5);
+		tabBg.x = x;
+		tabBg.y = y;
+		tabBg.speed = speed;
+		game.stage.addChild(tabBg);
+
+		tabLabel.isTab = true;
+		tabLabel.anchor.set(0.5);
+		tabLabel.x = x + 2;
+		tabLabel.y = y - 4;
+		tabLabel.zIndex = 13;
+		tabLabel.speed = speed;
+		game.stage.addChild(tabLabel);
+
+	},
+
+	failTab(tabItem, i){
+		tabItem.failed = true;
+
+		const tabBg = PIXI.Sprite.fromImage('img/tab-ball-red.png');
+		tabBg.isTab = true;
+		tabBg.zIndex = 12;
+		tabBg.anchor.set(0.5);
+		tabBg.x = tabItem.x + tabItem.speed * 2 + 1;
+		tabBg.y = tabItem.y;
+		tabBg.speed = tabItem.speed;
+		game.stage.addChild(tabBg);
+		game.stage.removeChildAt(i);
+		currentShit += 5;
+	},
+
+	update(tabItem, i){
+		tabItem.x -= tabItem.speed;
+		if(tabItem.isTabBg && !tabItem.failed && tabLimit && (tabItem.x < tabLimit)) tab.failTab(tabItem, i);
 	},
 
 	init(){
@@ -122,6 +216,11 @@ const tab = {
 };
 const mainLoop = () => {
 	sortZIndex();
+	game.stage.children.forEach((child, i) => {
+		if(child.isTab) tab.update(child, i);
+		if(child.isChrome) game.stage.removeChildAt(i);
+	});
+	chrome.draw();
 },
 
 init = () => {
@@ -133,4 +232,4 @@ init = () => {
 	game.ticker.add(mainLoop);
 };
 
-init();
+setTimeout(init, 100);

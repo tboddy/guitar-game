@@ -1,5 +1,10 @@
 const mainLoop = () => {
 	sortZIndex();
+	game.stage.children.forEach((child, i) => {
+		if(child.isTab) tab.update(child, i);
+		if(child.isChrome) game.stage.removeChildAt(i);
+	});
+	chrome.draw();
 },
 
 init = () => {
@@ -11,4 +16,4 @@ init = () => {
 	game.ticker.add(mainLoop);
 };
 
-init();
+setTimeout(init, 100);

@@ -28,4 +28,12 @@ sortZIndex = () => {
     b.zIndex = b.zIndex || 0;
     return a.zIndex - b.zIndex
 	});
+},
+
+processScore = input => {
+	let scoreString = String(input);
+	for(j = scoreString.length; j < 8; j++){
+		scoreString = '0' + scoreString;
+	}
+	return scoreString;
 };

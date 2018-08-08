@@ -5,6 +5,7 @@ module.exports = function(grunt) {
 				src: [
 					'src/global.js',
 					'src/controls.js',
+					'src/chrome.js',
 					'src/strings.js',
 					'src/tab.js',
 					'src/game.js'

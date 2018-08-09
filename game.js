@@ -196,7 +196,7 @@ const tab = {
 		tabBg.isTab = true;
 		tabBg.zIndex = 12;
 		tabBg.anchor.set(0.5);
-		tabBg.x = tabItem.x + tabItem.speed * 2 + 1;
+		tabBg.x = tabItem.x;
 		tabBg.y = tabItem.y;
 		tabBg.speed = tabItem.speed;
 		game.stage.addChild(tabBg);
